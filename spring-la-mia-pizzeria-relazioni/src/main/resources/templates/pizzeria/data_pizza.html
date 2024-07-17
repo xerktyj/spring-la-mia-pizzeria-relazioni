@@ -27,41 +27,50 @@
 				<div class="col-12" th:if="${pizza != null}">
 					<div class="card mb-4">
 						<h3>Nome: </h3> <span th:text="${pizza.name}"> </span>
-						<h3>Ingredienti: </h3> <span th:text="${pizza.description}"> </span>
+						<h3>Descrizione: </h3> <span th:text="${pizza.description}"> </span>
 						<h3>Prezzo: </h3> <span th:text="${pizza.price} + '€'"> </span>
 						<h3>Foto: </h3> <img th:src="@{|${pizza.photo}|}"> </img>
 					</div>
+					<div th:if="${(pizza.ingredients).size() > 0}">
+						<h3>Ingredienti:</h3>
+						<ul th:each="ingredienti : ${pizza.ingredients}">
+							<a style="color: black;" th:href="@{/pizza/ingredient/{id} (id =${ingredienti.id})}">
+								<li th:text="${ingredienti.name}"> </li>
+							</a>
+						</ul>
+					</div>
+					<h5>Modifica Pizza</h5>
 					<div>
-						<h5>Modifica Pizza</h5>
-						<div>
-							<a th:href="@{/home/pizze/editpizza/{id} (id=${pizza.id})}" class="btn btn-primary mb-2">Modifica</a>
-						</div>
-						<div>
-							<form th:action="@{/home/pizze/delete/{id} (id=${pizza.id})}" method="post">
-								<button class="btn btn-danger" type="submit"
-									th:data-confirm-delete="|Sei sicuro di voler cancellare questa pizza?|"
-									onclick="if(!confirm(this.getAttribute('data-confirm-delete')))return false">Delete</button>
-							</form>
-						</div>
+						<a th:href="@{/home/pizze/editpizza/{id} (id=${pizza.id})}"
+							class="btn btn-primary mb-2">Modifica</a>
+					</div>
+					<div>
+						<form th:action="@{/home/pizze/delete/{id} (id=${pizza.id})}" method="post">
+							<button class="btn btn-danger" type="submit"
+								th:data-confirm-delete="|Sei sicuro di voler cancellare questa pizza?|"
+								onclick="if(!confirm(this.getAttribute('data-confirm-delete')))return false">Delete</button>
+						</form>
 					</div>
 					<div>
 						<h5>Offerta Speciale</h5>
-						<a th:href="@{/home/pizze/addoffer/	{id} (id=${pizza.id})}" class="btn btn-primary mb-2">Aggiungi</a>
-						<a th:href="@{/pizza/specialoffers/{id} (id=${pizza.id})}" class="btn btn-primary mb-2">Storico Offerte</a>
+						<a th:href="@{/home/pizze/addoffer/	{id} (id=${pizza.id})}"
+							class="btn btn-primary mb-2">Aggiungi</a>
+						<a th:href="@{/pizza/specialoffers/{id} (id=${pizza.id})}" class="btn btn-primary mb-2">Storico
+							Offerte</a>
 					</div>
 				</div>
-				<div class="col-12">
-					<div th:if="${deleteError}">
-						<h1>non puoi cancellare la seguente pizza prima devi cancellare i suoi riferimenti (le offerte associate)</h1>
-					</div>
-					<div th:if="${deleteCorrect}">
-						<h1>Hai cancellato la pizza e tutti i suoi riferimenti</h1>
-					</div>
+			</div>
+			<div class="col-12">
+				<div th:if="${deleteError}">
+					<h1>non puoi cancellare la seguente pizza prima devi cancellare i suoi riferimenti (le offerte
+						associate)</h1>
 				</div>
-				
-				
+				<div th:if="${deleteCorrect}">
+					<h1>Hai cancellato la pizza e tutti i suoi riferimenti</h1>
+				</div>
 			</div>
 		</div>
+	</div>
 </section>
 
 
