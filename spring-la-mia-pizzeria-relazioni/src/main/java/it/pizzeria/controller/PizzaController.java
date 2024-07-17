@@ -18,6 +18,7 @@ import org.springframework.validation.ObjectError;
 
 import it.pizzeria.model.Pizza;
 import it.pizzeria.model.SpecialOffer;
+import it.pizzeria.repository.IngredientRepository;
 import it.pizzeria.repository.PizzaRepository;
 import it.pizzeria.repository.SpecialOfferRepository;
 import jakarta.validation.Valid;
@@ -32,13 +33,16 @@ public class PizzaController {
 	@Autowired
 	private SpecialOfferRepository specialOfferRepo;
 	
+	@Autowired
+	private IngredientRepository ingredientRepo;
+	
 	@GetMapping
 	public String home() {
 		return "/pizzeria/home";
 	}
 
 	@GetMapping("/pizze")
-	public String index(@RequestParam(name = "name", required = false) String name, Model model) throws Exception {
+	public String index(@RequestParam(name = "name", required = false) String name, Model model){
 		List<Pizza> listPizze = new ArrayList<Pizza>();
 		
 			if (searchPizza(name)) {
@@ -51,7 +55,7 @@ public class PizzaController {
 	}
 
 	@GetMapping("/pizze/{id}")
-	public String idPizza(@PathVariable int id, Model m) {
+	public String idPizza(@PathVariable int id, Model m) {		
 		m.addAttribute("pizza", pizzaRepo.findById(id));
 		return "/pizzeria/data_pizza";
 	}
@@ -60,6 +64,7 @@ public class PizzaController {
 	public String addPizza(Model model) {
 		model.addAttribute("addMode", true);
 		model.addAttribute("pizza", new Pizza());
+		model.addAttribute("ingredientsList", ingredientRepo.findAll());
 		return "/pizzeria/add-edit_pizza";
 	}
 	
@@ -72,6 +77,7 @@ public class PizzaController {
 		}
 		
 		if (bindingResult.hasErrors()) {
+			model.addAttribute("ingredientsList", ingredientRepo.findAll());
 			return "/pizzeria/add-edit_pizza";
 		}
 		
@@ -83,17 +89,15 @@ public class PizzaController {
 	public String editPizza(@PathVariable int id, Model m) {
 		m.addAttribute("addMode",false);
 		m.addAttribute("pizza", pizzaRepo.findById(id));
+		m.addAttribute("ingredientsList", ingredientRepo.findAll());
 		return "/pizzeria/add-edit_pizza";
 	}
 	
 	@PostMapping("/pizze/editpizza/{id}")
 	public String storeEditPizza(@Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult, Model model) {
-		model.addAttribute("addMode", false);
-		List<Pizza> list = pizzaRepo.findByName(formPizza.getName());		
-		if(list.size()>0) {
-			bindingResult.addError(new ObjectError("pizza","pizza già prensente in lista"));
-		}
+		model.addAttribute("addMode", false);		
 		if (bindingResult.hasErrors()) {
+			model.addAttribute("ingredientsList", ingredientRepo.findAll());
 			return "/pizzeria/add-edit_pizza";
 		}
 		pizzaRepo.save(formPizza);
