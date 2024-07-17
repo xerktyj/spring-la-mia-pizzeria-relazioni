@@ -55,7 +55,7 @@ public class SpecialOfferController {
 	}
 	
 	@GetMapping("/specialoffers/{id}")
-	public String indexSpecialOffers(@PathVariable("id") Integer id, Model model) throws Exception {
+	public String indexSpecialOffers(@PathVariable("id") Integer id, Model model){
 		Pizza pizza = pizzaRepo.findById(id).get();
 		List<SpecialOffer> listOffers = new ArrayList<SpecialOffer>();
 		listOffers = specialOfferRepo.findByPizza(pizza);
@@ -85,17 +85,14 @@ public class SpecialOfferController {
 	
 	@PostMapping("/offer/{id}/edit")
 	public String storeEditOffer(@Valid @ModelAttribute("offerta") SpecialOffer formOffer, BindingResult bindingResult,
-			Model model) {
-		
-		model.addAttribute("addMode", false);
-		
+			Model model) {		
+		model.addAttribute("addMode", false);		
 		if (formOffer.getEndDate() != null && formOffer.getStartDate() != null) {
 			if (formOffer.getEndDate().isBefore(formOffer.getStartDate())) {
 				bindingResult.addError(
 						new ObjectError("offerta", "la data di fine promozione è prima della data di inizio"));
 			}
-		}
-		
+		}		
 		if (bindingResult.hasErrors()) {
 			return "/offerte/add-edit_offer";
 		}
