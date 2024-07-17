@@ -37,6 +37,14 @@
 			</ul>
 		</div>
 		
+		<!--fragmetns per ingredienti-->	
+		<div th:fragment="ingredienti">
+			<ul th:each="ingredienti : ${ingredientsList}">
+				<a style="color: black;" th:href="@{/pizza/ingredient/{id} (id =${ingredienti.id})}">
+					<li th:text="${ingredienti}"> </li>
+				</a>
+			</ul>
+		</div>
 </body>
 
 </html>
