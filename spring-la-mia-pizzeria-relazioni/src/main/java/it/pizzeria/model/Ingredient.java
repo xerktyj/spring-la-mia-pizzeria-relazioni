@@ -84,7 +84,7 @@ public class Ingredient {
 
 	@Override
 	public String toString() {
-		return "nome: " + name + ", codice: " + serialNumber;
+		return "nome: " + name + ", codice: " + serialNumber  + " fornitore: " + supplier;
 	}
 		
 
