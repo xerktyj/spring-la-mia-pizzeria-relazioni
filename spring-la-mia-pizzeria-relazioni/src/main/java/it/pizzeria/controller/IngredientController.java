@@ -80,11 +80,8 @@ public class IngredientController {
 	public String storeEditIngredient(@Valid @ModelAttribute("ingrediente") Ingredient formIngredient,
 			BindingResult bindingResult, Model model) {
 		model.addAttribute("addMode", false);
-		List<Ingredient> list = ingredientRepo.findBySerialNumber(formIngredient.getSerialNumber());
-
-		if (list.size() > 0) {
-			bindingResult.addError(new ObjectError("ingrediente", "ingrediente già prensente in lista"));
-		} else if (formIngredient.getSerialNumber() != null) {
+		
+		if (formIngredient.getSerialNumber() != null) {
 			String code = Long.toString(formIngredient.getSerialNumber());
 			if (code.length() != 8) {
 				bindingResult.addError(
